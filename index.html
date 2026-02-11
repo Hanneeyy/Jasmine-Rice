@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday ✨</title>
+  <meta name="description" content="A professional, smooth, unique birthday website with cool transitions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0f1a;
+      --card: rgba(255,255,255,0.08);
+      --glass: rgba(255,255,255,0.12);
+      --accent: #7c9cff;
+      --accent-2: #ff8bd5;
+      --text: #e9ecf1;
+      --muted: #aab0c0;
+      --radius: 20px;
+      --blur: 14px;
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+    }
+
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: smooth; }
+    body{
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(124,156,255,.18), transparent 40%),
+                  radial-gradient(800px 500px at 110% 10%, rgba(255,139,213,.16), transparent 40%),
+                  var(--bg);
+      overflow-x: hidden;
+    }
+
+    /* Ambient animated blobs */
+    .blob{ position: fixed; inset: auto; width: 40vmax; height: 40vmax; filter: blur(60px); opacity:.25; pointer-events:none; mix-blend: screen; animation: float 18s linear infinite; }
+    .blob.one{ background: radial-gradient(circle at 30% 30%, #7c9cff, transparent 60%); top:-10vmax; left:-10vmax; }
+    .blob.two{ background: radial-gradient(circle at 70% 30%, #ff8bd5, transparent 60%); bottom:-10vmax; right:-10vmax; animation-duration: 22s; }
+    @keyframes float{ 0%{ transform: translateY(0) translateX(0) scale(1);} 50%{ transform: translateY(40px) translateX(30px) scale(1.05);} 100%{ transform: translateY(0) translateX(0) scale(1);} }
+
+    header{
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: clamp(24px, 4vw, 64px);
+      position: relative;
+    }
+
+    .hero{
+      max-width: 1100px;
+      width: 100%;
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: calc(var(--radius) + 8px);
+      box-shadow: var(--shadow);
+      padding: clamp(28px, 5vw, 72px);
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: clamp(24px, 4vw, 56px);
+      overflow: hidden;
+    }
+
+    .hero h1{
+      font-family: "Playfair Display", serif;
+      font-size: clamp(36px, 6vw, 72px);
+      line-height: 1.05;
+      margin: 0 0 12px;
+      letter-spacing: .3px;
+    }
+    .hero p{ color: var(--muted); max-width: 52ch; }
+
+    .cta{
+      margin-top: 28px;
+      display: inline-flex; gap: 10px; align-items: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f1a; font-weight: 700; text-decoration: none;
+      box-shadow: 0 10px 30px rgba(124,156,255,.45);
+      transform: translateZ(0);
+      transition: transform .35s ease, box-shadow .35s ease, filter .35s ease;
+    }
+    .cta:hover{ transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 40px rgba(124,156,255,.6); filter: saturate(1.1); }
+
+    .hero-card{
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.22);
+      padding: 18px;
+      display: grid; gap: 14px;
+    }
+    .stat{ display: grid; gap: 6px; padding: 14px; border-radius: 14px; background: rgba(255,255,255,.08); }
+    .stat strong{ font-size: 28px; }
+
+    main{ scroll-snap-type: y mandatory; }
+    section{
+      min-height: 100svh;
+      display: grid; place-items: center;
+      padding: clamp(24px, 4vw, 64px);
+      scroll-snap-align: start;
+      position: relative;
+    }
+
+    .panel{
+      max-width: 1100px; width: 100%;
+      background: var(--card);
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: calc(var(--radius) + 6px);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 5vw, 64px);
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 4vw, 48px);
+      transform: translateY(24px) scale(.98);
+      opacity: 0;
+      transition: transform .9s cubic-bezier(.2,.7,0,1), opacity .9s ease;
+    }
+    .panel.visible{ transform: none; opacity: 1; }
+
+    .eyebrow{ letter-spacing: .18em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
+    .title{ font-family: "Playfair Display", serif; font-size: clamp(28px, 5vw, 48px); margin: 10px 0 8px; }
+    .copy{ color: var(--muted); }
+
+    .art{
+      position: relative; border-radius: var(--radius); overflow: hidden; min-height: 260px;
+      background: radial-gradient(120% 100% at 10% 10%, rgba(124,156,255,.35), transparent 40%),
+                  radial-gradient(120% 100% at 90% 10%, rgba(255,139,213,.35), transparent 40%),
+                  linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.2);
+      aspect-ratio: 1/1.2;
+    }
+    .shine{ position:absolute; inset:-40%; background: linear-gradient(120deg, transparent 45%, rgba(255,255,255,.25), transparent 55%); transform: rotate(8deg); animation: shine 4s ease-in-out infinite; }
+    @keyframes shine{ 0%{ transform: translateX(-60%) rotate(8deg);} 50%{ transform: translateX(60%) rotate(8deg);} 100%{ transform: translateX(-60%) rotate(8deg);} }
+
+    /* Footer finale */
+    .finale{
+      text-align: center;
+      display: grid; gap: 16px; place-items: center;
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+    }
+    .finale h2{ font-family: "Playfair Display", serif; font-size: clamp(34px, 6vw, 64px); margin: 0; }
+
+    /* Reveal button styling */
+    .reveal-btn{
+      margin-top: 20px;
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 16px 32px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b0f1a;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(124,156,255,.45);
+      transform: translateZ(0);
+      transition: transform .35s ease, box-shadow .35s ease, filter .35s ease;
+    }
+    .reveal-btn:hover{
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 18px 40px rgba(124,156,255,.6);
+      filter: saturate(1.1);
+    }
+    .reveal-btn:active{
+      transform: translateY(-1px) scale(0.98);
+    }
+
+    /* --- Final surprise: photo + typing note --- */
+    .finale-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 2rem;
+    }
+    .section-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;       /* Crops to fill square */
+        object-position: center; /* Centers the crop */
+        z-index: 1;
+    }
+    .finale-initial {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      text-align: center;
+    }
+    
+    .finale-surprise {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .finale.reveal-active .finale-initial {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+    }
+    
+    .finale.reveal-active .finale-surprise {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: all;
+    }
+
+    .young-photo {
+      width: 280px;
+      max-width: 80%;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -8px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.4);
+      transform: scale(0.8) rotate(-2deg);
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.17, 0.67, 0.12, 1.02), opacity 0.9s ease;
+    }
+    .young-photo.pop {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
+
+    .typing-wrapper {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 500;
+      color: var(--text);
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      text-shadow: 0 0 12px rgba(124,156,255,0.25);
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      padding: 24px 36px;
+      border-radius: 60px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.12);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+    }
+    .typing-wrapper.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      background-color: var(--accent);
+      margin-left: 2px;
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Sparkles & fireworks base (global) */
+    .sparkles-wrapper{
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 10;
+    }
+    .sparkle{
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255,255,255,.8);
+      animation: sparkleFloat 3s ease-in-out infinite;
+    }
+    @keyframes sparkleFloat{
+      0%, 100%{ transform: translateY(0) scale(0); opacity: 0; }
+      10%{ opacity: 1; transform: translateY(-10px) scale(1); }
+      90%{ opacity: .6; transform: translateY(-80px) scale(.8); }
+      100%{ opacity: 0; transform: translateY(-100px) scale(0); }
+    }
+    .firework{
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: fireworkExplode 1.5s ease-out forwards;
+    }
+    @keyframes fireworkExplode{
+      0%{ transform: translate(0, 0) scale(1); opacity: 1; }
+      100%{ transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+    }
+
+    canvas#confetti{ position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+
+    @media (max-width: 860px){
+      .hero, .panel{ grid-template-columns: 1fr; }
+      .hero-card{ order: -1; }
+      .young-photo { width: 220px; }
+      .finale-container {
+        padding: 1rem;
+      }
+    }
+    
+    /* Panel animation for finale section */
+    .finale .panel {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .finale.reveal-active .panel {
+      border-radius: 16px;
+      transform: scale(1.02);
+      box-shadow: 0 25px 60px rgba(0,0,0,.45), 
+                  0 0 40px rgba(124,156,255,0.25),
+                  0 0 50px rgba(255,139,213,0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+  <canvas id="confetti"></canvas>
+
+  <header id="top">
+    <div class="hero">
+      <div>
+        <span class="eyebrow">February 13, 2026</span>
+        <h1>Happy Birthday to my Favorite Asian Rice</h1>
+        <p>
+            Take this small gift I made to celebrate your day. It's not much, but it was made with care and love just for you. You've been nothing but the best to me, and I hope you always remind yourself of that. Happy Birthday—no divorce, bitch
+        </p>
+        <audio id="bgm" src="bird.mp3" loop></audio>
+        <a class="cta" href="#section-1" onclick="bgm.paused && bgm.play()">Click Me to Begin the Journey →</a>
+      </div>
+      <div class="hero-card">
+        <div class="stat"><strong>∞</strong><span class="muted">Reasons to celebrate you</span></div>
+        <div class="stat"><strong>365</strong><span class="muted">New chances this year</span></div>
+        <div class="stat"><strong>1</strong><span class="muted">You. Irreplaceable.</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="section-1">
+      <div class="panel reveal">
+        <div>
+          <span class="eyebrow">Section One</span>
+          <h2 class="title">Grateful For Meeting a Person Like You</h2>
+          <p class="copy">
+            Years ago, when we first met, I used to think you'd be one of those people I'd talk to and then just drift away on some random Tuesday evening. But for some reason, you were different. You stayed. And you stayed. And you stayed. I hope you know how truly grateful I am to have met someone like you. Someone who listens, someone I can go to, someone I can trust, someone who never judges me no matter how weird I get, and, of course, someone I can call a friend.
+            I know it sounds cliché, but it's true. You are honestly one of the best people I have ever met in my life, and I don't think you realize just how much I appreciate you. Who would have thought I'd trust my life with someone I met online? That's how much you mean to me. I hope you know this, and I hope you remind yourself, every day or maybe every week or month, that even if we don't talk as much, you are still the same person I met years ago.
+            I am grateful for you, today and every day.
+          </p>
+        </div>
+        <div class="art">
+            <img src="sec1.jpg" alt="Cadet" class="section-image">
+        <div class="shine"></div></div>
+      </div>
+    </section>
+
+    <section id="section-2">
+      <div class="panel reveal">
+        <div class="art">
+            <img src="sec2.jpg" alt="Cadet" class="section-image">
+        <div class="shine"></div></div>
+        <div>
+          <span class="eyebrow">Section Two</span>
+          <h2 class="title">Never Stop Chasing Your Dreams</h2>
+          <p class="copy">
+            Now that you're a year older, you can see how life works, how priorities change, and how the things we used to love can become the things we barely do, while the dreams we once had sometimes start to fade. I hope you never forget to keep chasing yours. Life gets hard, and there will always be obstacles, but always remind yourself not to
+            let them get the best of you. Never stop believing in yourself, and never let your dreams fade away. I remember back when we were teens, you told me how you wanted to be a pilot. Always hold on to those small, little things that remind you of what makes you you. And for your birthday, my wish for you is that all your dreams and wishes come true. Whatever they may be, always know I'll be here cheering you on every step of the way.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-3">
+      <div class="panel reveal">
+        <div>
+          <span class="eyebrow">Section Three</span>
+          <h2 class="title">Thank You for Everything</h2>
+          <p class="copy">
+            So, thank you, Jasmine. Thank you for being you, and thank you for sharing your light with me. I may not have been the best friend—missing two of your birthdays and forgetting to greet you on other occasions—but I hope you know how thankful I am for you, and how glad I am that I got to meet someone like you. You truly mean a lot to me.
+            Thank you for being a good friend to your friends, even though you always say how much you hate them. Thank you for being a great sister to your siblings, a loving daughter and granddaughter, and, of course, a devoted mom to your cat. Thank you for everything! Life would be different if you weren’t in it, so thank you for being a part of my life.
+            Thank you for being the Harry Cameron to my Evelyn Hugo—and just like in the book, thank you for making me believe that friendship could be written in the stars.
+            I love you, bitch. No Homo. No divorce.
+          </p>
+        </div>
+        <div class="art">
+             <img src="sec3.jpg" alt="Cadet" class="section-image">
+        <div class="shine"></div></div>
+      </div>
+    </section>
+
+    <!-- FINALE – enhanced with smooth reveal -->
+    <section id="finale" class="finale">
+      <div class="panel reveal finale" id="finalePanel">
+        <div class="finale-container">
+          <div class="finale-initial">
+            <h2>One Last Thing</h2>
+            <button class="reveal-btn" id="revealBtn">Reveal The Final Surprise</button>
+          </div>
+          <div class="finale-surprise" id="finaleSurprise">
+            <img class="young-photo" src="jasmine.jpg" alt="Younger Jasmine">
+            <div class="typing-wrapper" id="typingEffectContainer"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sparkles container inside finale -->
+      <div id="fireworksGlobalContainer" class="sparkles-wrapper"></div>
+    </section>
+  </main>
+
+  <script>
+    // ---------- Scroll reveal ----------
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
+    }, { threshold: .25 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ---------- Confetti ----------
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let w, h, particles = [], running = false;
+    const colors = ['#7c9cff', '#ff8bd5', '#ffffff'];
+
+    function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize); resize();
+
+    function spawn(n=120){
+      for(let i=0;i<n;i++){
+        particles.push({
+          x: Math.random()*w,
+          y: h + Math.random()*200,
+          vx: (Math.random()-.5)*2,
+          vy: - (2 + Math.random()*4),
+          r: 2 + Math.random()*3,
+          c: colors[Math.floor(Math.random()*colors.length)],
+          life: 120 + Math.random()*60
+        });
+      }
+    }
+
+    function tick(){
+      if(!running) return;
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.life--;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = p.c; ctx.fill();
+      });
+      particles = particles.filter(p => p.life > 0 && p.y < h + 20);
+      requestAnimationFrame(tick);
+    }
+
+    // ---------- Fireworks & sparkles ----------
+    function createFireworks(containerId = 'fireworksGlobalContainer', burstCount = 6) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const fireworkColors = ['#7c9cff', '#ff8bd5', '#ffffff', '#ffd700'];
+      
+      for (let i = 0; i < burstCount; i++) {
+        setTimeout(() => {
+          const centerX = Math.random() * 80 + 10;
+          const centerY = Math.random() * 60 + 20;
+          
+          for (let j = 0; j < 16; j++) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = centerX + '%';
+            firework.style.top = centerY + '%';
+            firework.style.background = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+            
+            const angle = (j / 16) * Math.PI * 2;
+            const distance = 80 + Math.random() * 180;
+            firework.style.setProperty('--x', Math.cos(angle) * distance + 'px');
+            firework.style.setProperty('--y', Math.sin(angle) * distance + 'px');
+            
+            container.appendChild(firework);
+            setTimeout(() => firework.remove(), 1500);
+          }
+        }, i * 300 + 200);
+      }
+    }
+
+    function createSparkles(containerId = 'fireworksGlobalContainer', count = 40) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.className = 'sparkle';
+          sparkle.style.left = Math.random() * 100 + '%';
+          sparkle.style.top = Math.random() * 100 + '%';
+          sparkle.style.animationDelay = Math.random() * 2 + 's';
+          container.appendChild(sparkle);
+          setTimeout(() => sparkle.remove(), 3000);
+        }, i * 80);
+      }
+    }
+
+    // ---------- Typing effect ----------
+    function typeWriter(element, text, speed = 80, callback) {
+      let i = 0;
+      element.innerHTML = '';
+      const cursorSpan = document.createElement('span');
+      cursorSpan.className = 'typing-cursor';
+      cursorSpan.innerHTML = '|';
+      
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        } else {
+          element.appendChild(cursorSpan);
+          if (callback) callback();
+        }
+      }
+      type();
+    }
+
+    // ---------- Finale reveal ----------
+    document.getElementById('revealBtn').addEventListener('click', function() {
+      const finalePanel = document.getElementById('finalePanel');
+      const photo = document.querySelector('.young-photo');
+      const typingContainer = document.getElementById('typingEffectContainer');
+      
+      // Add active class to trigger panel expansion and content transition
+      finalePanel.classList.add('reveal-active');
+      
+      // After the initial transition, animate the photo
+      setTimeout(() => {
+        photo.classList.add('pop');
+        
+        // After photo animation, start typing effect
+        setTimeout(() => {
+          const fullMessage = 'Younger you would be proud of the person you have become. Happy Birthday!';
+          typeWriter(typingContainer, fullMessage, 2, () => {
+            typingContainer.classList.add('show');
+            
+            // After typing completes, trigger celebrations
+            setTimeout(() => {
+              createFireworks('fireworksGlobalContainer', 10);
+              createSparkles('fireworksGlobalContainer', 80);
+              spawn(400);
+              if (!running) { running = true; tick(); }
+            }, 400);
+          });
+        }, 400);
+      }, 650);
+    });
+  </script>
+</body>
+</html>
