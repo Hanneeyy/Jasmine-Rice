@@ -112,27 +112,229 @@
       border-radius: calc(var(--radius) + 6px);
       box-shadow: var(--shadow);
       padding: clamp(24px, 5vw, 64px);
-      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 4vw, 48px);
+      display: grid; grid-template-columns: 1fr; gap: clamp(18px, 4vw, 48px);
       transform: translateY(24px) scale(.98);
       opacity: 0;
       transition: transform .9s cubic-bezier(.2,.7,0,1), opacity .9s ease;
     }
     .panel.visible{ transform: none; opacity: 1; }
 
-    .eyebrow{ letter-spacing: .18em; text-transform: uppercase; color: var(--accent); font-weight: 700; }
-    .title{ font-family: "Playfair Display", serif; font-size: clamp(28px, 5vw, 48px); margin: 10px 0 8px; }
-    .copy{ color: var(--muted); }
+    .eyebrow{ letter-spacing: .18em; text-transform: uppercase; color: var(--accent); font-weight: 700; text-align: center; }
+    .title{ font-family: "Playfair Display", serif; font-size: clamp(28px, 5vw, 48px); margin: 10px 0 8px; text-align: center; }
+    .copy {
+      max-width: 100%;
+      width: 100%;
+      line-height: 1.8;
+      text-align: center;
+      color: var(--muted);
+      text-align: justify;
+    }
+
 
     .art{
-      position: relative; border-radius: var(--radius); overflow: hidden; min-height: 260px;
+      position: relative; border-radius: var(--radius); overflow: hidden;
       background: radial-gradient(120% 100% at 10% 10%, rgba(124,156,255,.35), transparent 40%),
                   radial-gradient(120% 100% at 90% 10%, rgba(255,139,213,.35), transparent 40%),
                   linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
       border: 1px solid rgba(255,255,255,.2);
-      aspect-ratio: 1/1.2;
+      aspect-ratio: 16/9;
+      width: 100%;
+      height: auto;
     }
     .shine{ position:absolute; inset:-40%; background: linear-gradient(120deg, transparent 45%, rgba(255,255,255,.25), transparent 55%); transform: rotate(8deg); animation: shine 4s ease-in-out infinite; }
     @keyframes shine{ 0%{ transform: translateX(-60%) rotate(8deg);} 50%{ transform: translateX(60%) rotate(8deg);} 100%{ transform: translateX(-60%) rotate(8deg);} }
+
+    /* ============ NEW CAROUSEL STYLES ============ */
+    .carousel-panel {
+      max-width: 1400px;
+      width: 100%;
+      background: var(--card);
+      backdrop-filter: blur(var(--blur));
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: calc(var(--radius) + 6px);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 5vw, 64px);
+      display: grid;
+      gap: clamp(24px, 4vw, 40px);
+      transform: translateY(24px) scale(.98);
+      opacity: 0;
+      transition: transform .9s cubic-bezier(.2,.7,0,1), opacity .9s ease;
+    }
+    .carousel-panel.visible{ transform: none; opacity: 1; }
+
+    .carousel-header {
+      text-align: center;
+    }
+
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: var(--shadow);
+    }
+
+    .carousel-track {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .carousel-slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                  transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: all;
+      z-index: 2;
+    }
+
+    .carousel-slide img,
+    .carousel-slide video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius);
+    }
+
+    .carousel-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px 32px;
+      background: linear-gradient(to top, rgba(11,15,26,0.95), transparent);
+      backdrop-filter: blur(8px);
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .carousel-slide.active .carousel-caption {
+      transform: translateY(0);
+    }
+
+    .carousel-caption p {
+      margin: 0;
+      font-size: clamp(14px, 2vw, 16px);
+      color: var(--text);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    }
+
+    .carousel-nav:hover {
+      background: linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.15));
+      transform: translateY(-50%) scale(1.08);
+      box-shadow: 0 12px 32px rgba(124,156,255,.4);
+    }
+
+    .carousel-nav:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    .carousel-nav.prev {
+      left: 20px;
+    }
+
+    .carousel-nav.next {
+      right: 20px;
+    }
+
+    .carousel-nav svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--text);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .carousel-indicators {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      border: 1px solid rgba(255,255,255,.35);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .carousel-dot.active {
+      width: 32px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 4px 12px rgba(124,156,255,.5);
+    }
+
+    .carousel-dot:hover:not(.active) {
+      background: rgba(255,255,255,.45);
+      transform: scale(1.15);
+    }
+
+    @media (max-width: 860px) {
+      .carousel-nav {
+        width: 44px;
+        height: 44px;
+      }
+      .carousel-nav.prev {
+        left: 12px;
+      }
+      .carousel-nav.next {
+        right: 12px;
+      }
+      .carousel-nav svg {
+        width: 20px;
+        height: 20px;
+      }
+      .carousel-caption {
+        padding: 18px 20px;
+      }
+    }
+    /* ============ END CAROUSEL STYLES ============ */
 
     /* Footer finale */
     .finale{
@@ -321,7 +523,7 @@
     canvas#confetti{ position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
 
     @media (max-width: 860px){
-      .hero, .panel{ grid-template-columns: 1fr; }
+      .hero{ grid-template-columns: 1fr; }
       .hero-card{ order: -1; }
       .young-photo { width: 220px; }
       .finale-container {
@@ -361,7 +563,7 @@
         <p>
             Take this small gift I made to celebrate your day. It's not much, but it was made with care and love just for you. You've been nothing but the best to me, and I hope you always remind yourself of that. Happy Birthday—no divorce, bitch
         </p>
-        <audio id="bgm" src="bird.mp3" loop></audio>
+        <audio id="bgm" src="Ribs.mp3" loop></audio>
         <a class="cta" href="#section-1" onclick="bgm.paused && bgm.play()">Click Me to Begin the Journey →</a>
       </div>
       <div class="hero-card">
@@ -375,18 +577,21 @@
   <main>
     <section id="section-1">
       <div class="panel reveal">
+        <div class="art">
+            <img src="sec1.jpg" alt="Cadet" class="section-image">
+        <div class="shine"></div></div>
         <div>
           <span class="eyebrow">Section One</span>
           <h2 class="title">Grateful For Meeting a Person Like You</h2>
           <p class="copy">
-            Years ago, when we first met, I used to think you'd be one of those people I'd talk to and then just drift away on some random Tuesday evening. But for some reason, you were different. You stayed. And you stayed. And you stayed. I hope you know how truly grateful I am to have met someone like you. Someone who listens, someone I can go to, someone I can trust, someone who never judges me no matter how weird I get, and, of course, someone I can call a friend.
-            I know it sounds cliché, but it's true. You are honestly one of the best people I have ever met in my life, and I don't think you realize just how much I appreciate you. Who would have thought I'd trust my life with someone I met online? That's how much you mean to me. I hope you know this, and I hope you remind yourself, every day or maybe every week or month, that even if we don't talk as much, you are still the same person I met years ago.
-            I am grateful for you, today and every day.
+            Years ago, when we first met, I used to think you'd be one of those people I'd talk to and then just drift away from on some random Tuesday evening. But for some reason, you were different. You stayed. And you stayed. And you stayed.
+            I hope you know how truly grateful I am to have met someone like you. Someone who listens, someone I can go to, someone I can trust, someone who never judges me no matter how weird I get, and of course, someone I can call a friend. I know it sounds cliché, but it is true. You are honestly one of the best people I have ever met in my life, and I do not think you realize just how much I appreciate you.
+            Who would have thought I would trust my life with someone I met online? That is how much you mean to me. I hope you know this, and I hope you remind yourself every day, or maybe every week or month, that even if we do not talk as much, you are still the same person I met years ago. I am grateful for you, today and every day.
+            I respect you to the highest level, to the point that I would be willing to take a bullet for you. And if you asked me why I am so grateful for you, the honest answer is that I really do not know how to explain it.
+            There is this saying in ethics that the word "good" is indefinable, kind of like how we define the color yellow. You can recognize yellow when you see it, and you understand what "good" means when you think about it, but you cannot explain either using simpler words or break them into parts.
+            So if you ask me again why I am grateful for you, I can feel why, but I cannot explain it in simple words. What I do know is that knowing you has made my life better, and having you in it is something I will never take for granted. No matter where life takes us or how often we talk, you will always matter to me.
           </p>
         </div>
-        <div class="art">
-            <img src="sec1.jpg" alt="Cadet" class="section-image">
-        <div class="shine"></div></div>
       </div>
     </section>
 
@@ -408,19 +613,124 @@
 
     <section id="section-3">
       <div class="panel reveal">
+        <div class="art">
+             <img src="joj.png" alt="Cadet" class="section-image">
+        <div class="shine"></div></div>
         <div>
           <span class="eyebrow">Section Three</span>
+          <h2 class="title">Looking Back</h2>
+          <p class="copy">
+            Looking back, I realize how much we've grown. From being two teenage kids to slowly entering adulthood. From meeting each other as collarvfx and void.haught to now calling each other "bitch" or maybe "whore" sometimes. From graduating high school to now entering the lives we once only talked about. I met you when you were 14, and being able to still talk and update each other sometimes makes me really appreciate the friendship we have.
+            Remember the times when all we used to do was edit and gossip about the people around us? The time we created our own TikTok account, but it turned out you were the only one actually using it—AHHAHA. The time you got your car and crashed it. Or the time you got your heart broken and came to me for advice, even when I had no idea how relationships worked. Or the time you got your job in the airlines! Or the time you introduced me to GAP, and I said I’d never watch it, but now I fangirl over Thai actors. The point is, there are so many memories we created, even though we lived so far apart. And what's funny is that you, who lives kilometers away, know me better than my real-life friends.
+            Looking back at all of that makes me appreciate you even more. I don’t want to be cheesy, but I’m glad I have a Jasmine La in my life. Everyone deserves a Jasmine La in their life. I’m glad I met you, Jasmine, and I’m sure as hell that the people around you are glad they did too.
+            <br><br>The point is, I've seen you grow for a quarter of your life. So how about we take a walk down memory lane?
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ NEW CAROUSEL SECTION ============ -->
+    <section id="carousel-section">
+      <div class="carousel-panel reveal">
+        <div class="carousel-header">
+          <span class="eyebrow">Memory Lane</span>
+          <h2 class="title">Captured Moments</h2>
+        </div>
+        
+        <div class="carousel-container">
+          <div class="carousel-track" id="carouselTrack">
+            <!-- Slide 1 -->
+            <div class="carousel-slide active" style="position: relative; display: inline-block;">
+              
+              <video id="carouselVideo" width="600" style="display: block;">
+                <source src="vid.mov" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              
+              <!-- Play Button Overlay -->
+              <div 
+                id="playOverlay" 
+                style="
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  font-size: 80px;
+                  color: rgba(255, 255, 255, 0.8);
+                  cursor: pointer;
+                  pointer-events: auto;
+                "
+              >
+                ▶
+              </div>
+              
+              <div class="carousel-caption" style="margin-top: 10px;">
+                <p>Do you remember your performances during high school? Believe it or not, you were my idol. One of the reasons I also took the stage and played the bass was because of you! You were such a badass in all your performances.</p>
+              </div>
+              
+            </div>
+
+            
+            <!-- Slide 2 -->
+            <div class="carousel-slide">
+              <img src="girly.PNG" alt="Memory 2">
+              <div class="carousel-caption">
+                <p>You being all girly! Look at that cute smile! I'm sure Bella is a lucky girl to see you smile like that all the time!</p>
+              </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="carousel-slide">
+              <img src="crying.png" alt="Memory 3">
+              <div class="carousel-caption">
+                <p>You crying on Evelyn Hugo of course HAHAHAHA.</p>
+              </div>
+            </div>
+            
+            <!-- Slide 4 - Example with video -->
+            <div class="carousel-slide">
+              <img src="cadet.PNG" alt="Memory photo">
+              <div class="carousel-caption">
+              <p>You at your ceremony! I remember how happy you were, but also how sad it was because you were leaving. I also remember how you enjoyed torturing the ones below you HAHAHA.</p>
+              </div>
+            </div>
+
+          </div>
+          
+          <!-- Navigation Buttons -->
+          <button class="carousel-nav prev" id="prevBtn" aria-label="Previous slide">
+            <svg viewBox="0 0 24 24">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="carousel-nav next" id="nextBtn" aria-label="Next slide">
+            <svg viewBox="0 0 24 24">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Indicators -->
+        <div class="carousel-indicators" id="carouselIndicators"></div>
+      </div>
+    </section>
+    <!-- ============ END CAROUSEL SECTION ============ -->
+
+        <section id="section-4">
+      <div class="panel reveal">
+        <div class="art">
+             <img src="hairless.PNG" alt="Cadet" class="section-image">
+        <div class="shine"></div></div>
+        <div>
+          <span class="eyebrow">Section Four</span>
           <h2 class="title">Thank You for Everything</h2>
           <p class="copy">
             So, thank you, Jasmine. Thank you for being you, and thank you for sharing your light with me. I may not have been the best friend—missing two of your birthdays and forgetting to greet you on other occasions—but I hope you know how thankful I am for you, and how glad I am that I got to meet someone like you. You truly mean a lot to me.
-            Thank you for being a good friend to your friends, even though you always say how much you hate them. Thank you for being a great sister to your siblings, a loving daughter and granddaughter, and, of course, a devoted mom to your cat. Thank you for everything! Life would be different if you weren’t in it, so thank you for being a part of my life.
+            Thank you for being a good friend to your friends, even though you always say how much you hate them. Thank you for being a great sister to your siblings, a loving daughter and granddaughter, and, of course, a devoted mom to your cat. Thank you for everything! Life would be different if you weren't in it, so thank you for being a part of my life.
             Thank you for being the Harry Cameron to my Evelyn Hugo—and just like in the book, thank you for making me believe that friendship could be written in the stars.
             I love you, bitch. No Homo. No divorce.
           </p>
         </div>
-        <div class="art">
-             <img src="sec3.jpg" alt="Cadet" class="section-image">
-        <div class="shine"></div></div>
       </div>
     </section>
 
@@ -445,6 +755,25 @@
   </main>
 
   <script>
+
+    const video = document.getElementById('carouselVideo');
+    const playOverlay = document.getElementById('playOverlay');
+    const bgm = document.getElementById('bgm');
+
+    playOverlay.addEventListener('click', () => {
+      video.play();
+      playOverlay.style.display = 'none'; // hide the triangle when playing
+      bgm.pause(); // pause background music when video plays
+    });
+
+    video.addEventListener('pause', () => {
+      playOverlay.style.display = 'block'; // show triangle if video is paused
+    });
+
+    video.addEventListener('ended', () => {
+      bgm.play(); // resume background music when video ends
+    });
+
     // ---------- Scroll reveal ----------
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => e.isIntersecting && e.target.classList.add('visible'));
@@ -551,6 +880,110 @@
       }
       type();
     }
+
+    // ============ CAROUSEL FUNCTIONALITY ============
+    const carouselTrack = document.getElementById('carouselTrack');
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicatorsContainer = document.getElementById('carouselIndicators');
+    
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    // Create indicators
+    slides.forEach((_, index) => {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot';
+      if (index === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(index));
+      indicatorsContainer.appendChild(dot);
+    });
+
+    const dots = Array.from(document.querySelectorAll('.carousel-dot'));
+
+    function updateCarousel() {
+      // Update slides
+      slides.forEach((slide, index) => {
+        slide.classList.remove('active');
+        if (index === currentSlide) {
+          slide.classList.add('active');
+          
+          // Auto-play video if it's the active slide
+          const video = slide.querySelector('video');
+          if (video) {
+            video.currentTime = 0;
+            video.play().catch(() => {}); // Ignore autoplay errors
+          }
+        } else {
+          // Pause video if not active
+          const video = slide.querySelector('video');
+          if (video) {
+            video.pause();
+          }
+        }
+      });
+
+      // Update indicators
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      updateCarousel();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      updateCarousel();
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+    }
+
+    // Event listeners
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const carouselSection = document.getElementById('carousel-section');
+      const rect = carouselSection.getBoundingClientRect();
+      const isInView = rect.top < window.innerHeight && rect.bottom >= 0;
+      
+      if (isInView) {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+      }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carouselTrack.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carouselTrack.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      if (touchEndX < touchStartX - swipeThreshold) {
+        nextSlide();
+      }
+      if (touchEndX > touchStartX + swipeThreshold) {
+        prevSlide();
+      }
+    }
+    // ============ END CAROUSEL FUNCTIONALITY ============
 
     // ---------- Finale reveal ----------
     document.getElementById('revealBtn').addEventListener('click', function() {
