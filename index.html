@@ -548,6 +548,215 @@
                   0 0 40px rgba(124,156,255,0.25),
                   0 0 50px rgba(255,139,213,0.25);
     }
+
+    /* ============ PARTY MODE STYLES ============ */
+    .party-section {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: clamp(24px, 4vw, 64px);
+      position: relative;
+      text-align: center;
+    }
+
+    .party-btn {
+      margin-top: 40px;
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 20px 48px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+      color: #0b0f1a;
+      font-weight: 800;
+      font-size: 24px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 15px 40px rgba(255,107,107,.5);
+      transform: translateZ(0);
+      transition: transform .35s ease, box-shadow .35s ease;
+      animation: partyPulse 2s ease-in-out infinite;
+    }
+
+    .party-btn:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 25px 50px rgba(255,107,107,.7);
+    }
+
+    @keyframes partyPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Party mode active state */
+    body.party-mode {
+      animation: hueShift 3s linear infinite;
+    }
+
+    @keyframes hueShift {
+      0% { filter: hue-rotate(0deg) saturate(1.5); }
+      100% { filter: hue-rotate(360deg) saturate(1.5); }
+    }
+
+    body.party-mode * {
+      animation: partyChaos 3s ease-in-out infinite !important;
+    }
+
+    body.party-mode h1,
+    body.party-mode h2,
+    body.party-mode .title {
+      animation: textSpin 4s linear infinite !important;
+    }
+
+    body.party-mode img,
+    body.party-mode .art,
+    body.party-mode .hero-card {
+      animation: imageFloat 2.5s ease-in-out infinite !important;
+    }
+
+    body.party-mode .panel,
+    body.party-mode .hero {
+      animation: panelBounce 2s ease-in-out infinite !important;
+    }
+
+    body.party-mode p,
+    body.party-mode .copy {
+      animation: textWave 3s ease-in-out infinite !important;
+    }
+
+    @keyframes partyChaos {
+      0%, 100% { 
+        transform: rotate(0deg) scale(1) translateY(0);
+      }
+      25% { 
+        transform: rotate(10deg) scale(1.1) translateY(-20px);
+      }
+      50% { 
+        transform: rotate(-10deg) scale(0.9) translateY(20px);
+      }
+      75% { 
+        transform: rotate(5deg) scale(1.05) translateY(-10px);
+      }
+    }
+
+    @keyframes textSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(180deg) scale(1.2); }
+      50% { transform: rotate(360deg) scale(0.8); }
+      75% { transform: rotate(540deg) scale(1.1); }
+      100% { transform: rotate(720deg) scale(1); }
+    }
+
+    @keyframes imageFloat {
+      0%, 100% { 
+        transform: translateY(0) rotate(0deg) scale(1);
+      }
+      33% { 
+        transform: translateY(-30px) rotate(120deg) scale(1.2);
+      }
+      66% { 
+        transform: translateY(30px) rotate(-120deg) scale(0.9);
+      }
+    }
+
+    @keyframes panelBounce {
+      0%, 100% { 
+        transform: scale(1) translateX(0);
+      }
+      25% { 
+        transform: scale(1.1) translateX(20px);
+      }
+      50% { 
+        transform: scale(0.95) translateX(-20px);
+      }
+      75% { 
+        transform: scale(1.05) translateX(10px);
+      }
+    }
+
+    @keyframes textWave {
+      0%, 100% { 
+        transform: translateY(0) skewX(0deg);
+      }
+      25% { 
+        transform: translateY(-15px) skewX(5deg);
+      }
+      50% { 
+        transform: translateY(15px) skewX(-5deg);
+      }
+      75% { 
+        transform: translateY(-10px) skewX(3deg);
+      }
+    }
+
+    .stop-party-btn {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 99999;
+      padding: 24px 64px;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff4757, #ff6348);
+      color: white;
+      border: 4px solid white;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 20px 60px rgba(255,71,87,.8);
+      animation: stopPulse 1s ease-in-out infinite;
+      display: none;
+    }
+
+    body.party-mode .stop-party-btn {
+      display: block;
+      animation: stopPulse 1s ease-in-out infinite !important;
+    }
+
+    @keyframes stopPulse {
+      0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 20px 60px rgba(255,71,87,.8);
+      }
+      50% { 
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 30px 80px rgba(255,71,87,1);
+      }
+    }
+
+    /* Floating party emojis */
+    .party-emoji {
+      position: fixed;
+      font-size: 40px;
+      pointer-events: none;
+      z-index: 9998;
+      animation: floatEmoji 10s ease-in-out infinite;
+    }
+
+    @keyframes floatEmoji {
+      0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      25% {
+        transform: translate(100px, -150px) rotate(90deg) scale(1.2);
+        opacity: 1;
+      }
+      50% {
+        transform: translate(-50px, -300px) rotate(180deg) scale(0.9);
+        opacity: 1;
+      }
+      75% {
+        transform: translate(150px, -150px) rotate(270deg) scale(1.1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg) scale(1);
+        opacity: 1;
+      }
+    }
+    /* ============ END PARTY MODE STYLES ============ */
   </style>
 </head>
 <body>
@@ -555,21 +764,25 @@
   <div class="blob two"></div>
   <canvas id="confetti"></canvas>
 
+  <!-- Stop Party Button (hidden by default) -->
+  <button class="stop-party-btn" id="stopPartyBtn">🛑 STOP THE PARTY!</button>
+
   <header id="top">
     <div class="hero">
       <div>
         <span class="eyebrow">February 13, 2026</span>
         <h1>Happy Birthday to my Favorite Asian Rice</h1>
         <p>
-            Take this small gift I made to celebrate your day. It's not much, but it was made with care and love just for you. You've been nothing but the best to me, and I hope you always remind yourself of that. Happy Birthday—no divorce, bitch
+            Take this small gift I made to celebrate your day. It's not much, but it was made with care and love just for you. You've been nothing but the best to me, and I hope you always remind yourself of that. Happy Birthday, bitch!
         </p>
         <audio id="bgm" src="Ribs.mp3" loop></audio>
+        <audio id="partyMusic" src="party.mp3" loop></audio>
         <a class="cta" href="#section-1" onclick="bgm.paused && bgm.play()">Click Me to Begin the Journey →</a>
       </div>
       <div class="hero-card">
         <div class="stat"><strong>∞</strong><span class="muted">Reasons to celebrate you</span></div>
         <div class="stat"><strong>365</strong><span class="muted">New chances this year</span></div>
-        <div class="stat"><strong>1</strong><span class="muted">You. Irreplaceable.</span></div>
+        <div class="stat"><strong>1</strong><span class="muted">The Best Jasmine La in the World</span></div>
       </div>
     </div>
   </header>
@@ -621,8 +834,8 @@
           <h2 class="title">Looking Back</h2>
           <p class="copy">
             Looking back, I realize how much we've grown. From being two teenage kids to slowly entering adulthood. From meeting each other as collarvfx and void.haught to now calling each other "bitch" or maybe "whore" sometimes. From graduating high school to now entering the lives we once only talked about. I met you when you were 14, and being able to still talk and update each other sometimes makes me really appreciate the friendship we have.
-            Remember the times when all we used to do was edit and gossip about the people around us? The time we created our own TikTok account, but it turned out you were the only one actually using it—AHHAHA. The time you got your car and crashed it. Or the time you got your heart broken and came to me for advice, even when I had no idea how relationships worked. Or the time you got your job in the airlines! Or the time you introduced me to GAP, and I said I’d never watch it, but now I fangirl over Thai actors. The point is, there are so many memories we created, even though we lived so far apart. And what's funny is that you, who lives kilometers away, know me better than my real-life friends.
-            Looking back at all of that makes me appreciate you even more. I don’t want to be cheesy, but I’m glad I have a Jasmine La in my life. Everyone deserves a Jasmine La in their life. I’m glad I met you, Jasmine, and I’m sure as hell that the people around you are glad they did too.
+            Remember the times when all we used to do was edit and gossip about the people around us? The time we created our own TikTok account, but it turned out you were the only one actually using it—AHHAHA. The time you got your car and crashed it. Or the time you got your heart broken and came to me for advice, even when I had no idea how relationships worked. Or the time you got your job in the airlines! Or the time you introduced me to GAP, and I said I'd never watch it, but now I fangirl over Thai actors. The point is, there are so many memories we created, even though we lived so far apart. And what's funny is that you, who lives kilometers away, know me better than my real-life friends.
+            Looking back at all of that makes me appreciate you even more. I don't want to be cheesy, but I'm glad I have a Jasmine La in my life. Everyone deserves a Jasmine La in their life. I'm glad I met you, Jasmine, and I'm sure as hell that the people around you are glad they did too.
             <br><br>The point is, I've seen you grow for a quarter of your life. So how about we take a walk down memory lane?
           </p>
         </div>
@@ -745,6 +958,7 @@
           <div class="finale-surprise" id="finaleSurprise">
             <img class="young-photo" src="jasmine.jpg" alt="Younger Jasmine">
             <div class="typing-wrapper" id="typingEffectContainer"></div>
+            <button class="party-btn" id="partyBtn" style="opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease;">🎊 Ready to Party? 🎊</button>
           </div>
         </div>
       </div>
@@ -752,6 +966,8 @@
       <!-- Sparkles container inside finale -->
       <div id="fireworksGlobalContainer" class="sparkles-wrapper"></div>
     </section>
+
+
   </main>
 
   <script>
@@ -759,6 +975,7 @@
     const video = document.getElementById('carouselVideo');
     const playOverlay = document.getElementById('playOverlay');
     const bgm = document.getElementById('bgm');
+    const partyMusic = document.getElementById('partyMusic');
 
     playOverlay.addEventListener('click', () => {
       video.play();
@@ -928,6 +1145,15 @@
       dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === currentSlide);
       });
+
+      // Hide navigation buttons on the last slide
+      if (currentSlide === totalSlides - 1) {
+        nextBtn.style.display = 'none';
+        prevBtn.style.display = 'none';
+      } else {
+        nextBtn.style.display = 'flex';
+        prevBtn.style.display = 'flex';
+      }
     }
 
     function nextSlide() {
@@ -990,6 +1216,7 @@
       const finalePanel = document.getElementById('finalePanel');
       const photo = document.querySelector('.young-photo');
       const typingContainer = document.getElementById('typingEffectContainer');
+      const partyBtn = document.getElementById('partyBtn');
       
       // Add active class to trigger panel expansion and content transition
       finalePanel.classList.add('reveal-active');
@@ -1010,11 +1237,140 @@
               createSparkles('fireworksGlobalContainer', 80);
               spawn(400);
               if (!running) { running = true; tick(); }
+              
+              // Show party button after celebrations
+              setTimeout(() => {
+                partyBtn.style.opacity = '1';
+                partyBtn.style.transform = 'translateY(0)';
+              }, 1000);
             }, 400);
           });
         }, 400);
       }, 650);
     });
+
+    // ============ PARTY MODE FUNCTIONALITY ============
+    const partyBtn = document.getElementById('partyBtn');
+    const stopPartyBtn = document.getElementById('stopPartyBtn');
+
+    // Function to create floating emojis
+    function createPartyEmojis() {
+      const emojis = ['🍹', '🎉', '🍸', '🥂', '🍾', '🎈', '🥳'];
+      const emoji = document.createElement('div');
+      emoji.className = 'party-emoji';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 90 + 'vw';
+      emoji.style.top = Math.random() * 90 + 'vh';
+      emoji.style.animationDuration = (8 + Math.random() * 4) + 's';
+      emoji.style.animationDelay = Math.random() * 2 + 's';
+      document.body.appendChild(emoji);
+      
+      // Don't remove emojis - let them keep floating
+    }
+
+    let emojiInterval;
+    let confettiInterval;
+    let fireworksInterval;
+
+    partyBtn.addEventListener('click', function() {
+      // Scroll to the very top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Activate party mode after a short delay to let scroll start
+      setTimeout(() => {
+        document.body.classList.add('party-mode');
+        
+        // Switch music - make sure bgm is paused and party music plays
+        bgm.pause();
+        bgm.currentTime = 0;
+        partyMusic.currentTime = 0;
+        partyMusic.play().catch(err => console.log('Party music play error:', err));
+        
+        // Trigger MASSIVE initial confetti
+        spawn(1500);
+        if (!running) { 
+          running = true; 
+          tick(); 
+        }
+        
+        // Continuous heavy confetti
+        confettiInterval = setInterval(() => {
+          if (document.body.classList.contains('party-mode')) {
+            spawn(400);
+          } else {
+            clearInterval(confettiInterval);
+          }
+        }, 1000);
+
+        // Start spawning LOTS of emojis
+        // Initial burst
+        for(let i = 0; i < 30; i++) {
+          setTimeout(() => createPartyEmojis(), i * 100);
+        }
+        
+        // Continuous emoji spawning
+        emojiInterval = setInterval(() => {
+          if (document.body.classList.contains('party-mode')) {
+            createPartyEmojis();
+            createPartyEmojis();
+            createPartyEmojis();
+          } else {
+            clearInterval(emojiInterval);
+          }
+        }, 300);
+
+        // Continuous fireworks and sparkles
+        fireworksInterval = setInterval(() => {
+          if (document.body.classList.contains('party-mode')) {
+            createFireworks('fireworksGlobalContainer', 8);
+            createSparkles('fireworksGlobalContainer', 60);
+          } else {
+            clearInterval(fireworksInterval);
+          }
+        }, 2000);
+
+        // Initial fireworks burst
+        createFireworks('fireworksGlobalContainer', 15);
+        createSparkles('fireworksGlobalContainer', 100);
+      }, 300);
+    });
+
+    stopPartyBtn.addEventListener('click', function() {
+      // Deactivate party mode
+      document.body.classList.remove('party-mode');
+      
+      // Switch music back - make sure party music stops and bgm plays
+      partyMusic.pause();
+      partyMusic.currentTime = 0;
+      bgm.currentTime = 0;
+      bgm.play().catch(err => console.log('BGM play error:', err));
+      
+      // Stop confetti
+      running = false;
+      particles = [];
+      ctx.clearRect(0, 0, w, h);
+
+      // Clear all intervals
+      if (emojiInterval) {
+        clearInterval(emojiInterval);
+      }
+      if (confettiInterval) {
+        clearInterval(confettiInterval);
+      }
+      if (fireworksInterval) {
+        clearInterval(fireworksInterval);
+      }
+      
+      // Remove all existing emojis
+      document.querySelectorAll('.party-emoji').forEach(emoji => emoji.remove());
+      
+      // Clear fireworks container
+      const fireworksContainer = document.getElementById('fireworksGlobalContainer');
+      if (fireworksContainer) {
+        fireworksContainer.innerHTML = '';
+      }
+    });
+    // ============ END PARTY MODE FUNCTIONALITY ============
   </script>
 </body>
 </html>
